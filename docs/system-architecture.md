@@ -1,6 +1,6 @@
 # System Architecture
 
-**Project:** Kavach\
+**Project:** Kaali\
 **Purpose:** Women's safety platform integrating safer-route planning,
 emergency response, and image-manipulation analysis.\
 **Architecture:** React + TypeScript PWA, Node.js + Express API, Python
@@ -11,7 +11,7 @@ intelligence service, MongoDB Atlas.\
 
 ## 1. Architecture Goals
 
-Kavach combines three workflows:
+Kaali combines three workflows:
 
 -   **Prevent:** Estimate safer walking routes using road-network data,
     risk scoring, and a custom constraint-optimization formulation.
@@ -446,7 +446,7 @@ share token.
 ## 9. Repository Structure
 
 ``` text
-kavach/
+Kaali/
 ├── client/
 │   └── src/
 │       ├── components/

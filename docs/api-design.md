@@ -1,6 +1,6 @@
 # API Design
 
-**Product:** Kavach --- Women's Safety Platform\
+**Product:** Kaali --- Women's Safety Platform\
 **Version:** 1.1 --- Hackathon implementation contract (canonical public contract)\
 **Date:** 22 October 2026\
 **Frontend:** React + TypeScript + Vite + MapLibre GL JS\
@@ -16,7 +16,7 @@ data/graph from OpenStreetMap where appropriate
 
 ## 1. Purpose
 
-This is the final API contract for the Kavach MVP. It supports:
+This is the final API contract for the Kaali MVP. It supports:
 
 1.  **Prevent:** custom safety-aware route planning, route display on a
     live map, GPS tracking, ETA/distance updates, deviation detection,
@@ -263,7 +263,7 @@ Response `201`:
 
 ### `POST /api/v1/contacts/:contactId/accept`
 
-Accept a valid invitation. The recipient may not be a Kavach user, so
+Accept a valid invitation. The recipient may not be a Kaali user, so
 the call is authorized by the invitation token, not by a user session.
 
 Request:
@@ -1203,7 +1203,7 @@ features unless they are implemented and tested.
 
 ## 17. Cross-document implementation contract
 
-This API document is the canonical public HTTP contract for Kavach.
+This API document is the canonical public HTTP contract for Kaali.
 
 -   Public endpoints use `/api/v1`; do not implement unversioned
     `/api/...` variants in the architecture document.

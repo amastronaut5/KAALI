@@ -1,6 +1,6 @@
-# Kavach --- Database Design
+# Kaali --- Database Design
 
-**Project:** Kavach --- Women's Safety Platform\
+**Project:** Kaali --- Women's Safety Platform\
 **Database:** MongoDB Atlas\
 **Backend owner:** Node.js + Express + TypeScript\
 **Intelligence services:** Python FastAPI (routing optimizer and
@@ -12,7 +12,7 @@ deepfake detector)\
 
 ## 1. Design goals
 
-The database should support Kavach's three product areas:
+The database should support Kaali's three product areas:
 
 -   **Prevent:** safety-aware route requests, route results, and
     crowd-sourced safety reports.
@@ -166,7 +166,7 @@ approach. Do not place secrets in the client bundle.
 ### 3.2 `contacts`
 
 Stores trusted emergency contacts and invitation/acceptance state. A
-contact is not automatically a registered Kavach user.
+contact is not automatically a registered Kaali user.
 
 ``` json
 {

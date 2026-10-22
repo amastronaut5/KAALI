@@ -1,4 +1,4 @@
-# Kavach docs: v1.1 changes
+# Kaali docs: v1.1 changes
 
 Applied after the cross-document review. Files: `api-design-updated.md`,
 `database-design-updated.md`, `system-architecture-updated.md`,
