@@ -1,6 +1,20 @@
-# Service-local secrets and Python runtime artifacts
-intelligence/.env
-intelligence/.venv/
-.venv/
+# Python artifacts
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Environments & Private Secrets (Keep .env.example intact)
+.env
+*.env
+!.env.example
+.venv/
+env/
+venv/
+node_modules/
+dist/
+
