@@ -1,0 +1,6 @@
+# Service-local secrets and Python runtime artifacts
+intelligence/.env
+intelligence/.venv/
+.venv/
+__pycache__/
+*.py[cod]

@@ -5,10 +5,10 @@
 **Date:** 22 October 2026\
 **Frontend:** React + TypeScript + Vite + MapLibre GL JS\
 **Backend:** Node.js + Express + TypeScript\
-**Intelligence:** Python + FastAPI (custom CP-SAT routing and
-custom-trained image manipulation detector)\
+**Intelligence:** Python + FastAPI (OSRM route adapter; custom CP-SAT and
+image manipulation detection are not implemented)\
 **Database:** MongoDB Atlas\
-**Realtime:** Browser Geolocation API + Socket.IO\
+**Realtime:** Browser Geolocation API + authenticated HTTP session updates; Socket.IO is not initialized\
 **Maps:** MapLibre GL JS with a configured map-tile provider; road
 data/graph from OpenStreetMap where appropriate
 
@@ -32,6 +32,14 @@ This API defines the backend contracts. A moving marker, map camera,
 route polyline, and local GPS display are primarily frontend behaviors
 using MapLibre and browser geolocation; they are not provided
 automatically by REST endpoints.
+
+**Current repository implementation note:** route generation uses
+provider-returned OSRM candidates and deterministic preference sorting.
+CP-SAT and a local road graph are not present. Trusted moderated reports
+can add explainable corridor context; when no report matches, `riskScore`
+is null and `riskStatus` is `unknown`. No deepfake detection endpoint or
+Socket.IO server is currently implemented. See `kaali-navigation-setup.md`
+for setup and implementation limits.
 
 ## 2. Architecture and ownership
 
@@ -1016,7 +1024,10 @@ Response (validated by Express before storing or returning):
 ```
 
 Edge-level risk $r_e \in [0,1]$ is aggregated into the route-level
-`riskScore` on the 0--100 scale. `solverStatus` must be the real solver
+`riskScore` on the 0--100 scale when route-matched report data exists, or
+`null` when risk is unknown. Responses include `riskStatus` (`estimated` or
+`unknown`) and `riskConfidence`; an unknown score must never be rendered as
+safe or as a numeric baseline. `solverStatus` must be the real solver
 status; `OPTIMAL` only when proven. Express chooses `selectedRouteId` according to the requested `priority`
 and persists a compact copy.
 Failure response: `{ "status": "error", "code": "NO_FEASIBLE_ROUTE", "message": "..." }`
@@ -1134,7 +1145,7 @@ services are down.
 
 1.  Auth/session and profile.
 2.  Trusted contacts.
-3.  `POST /routes` with custom optimizer output and MapLibre route
+3.  `POST /routes` with configured routing-provider output and MapLibre route
     rendering.
 4.  Start navigation session, GPS marker updates, route line,
     distance/ETA display.
@@ -1191,10 +1202,11 @@ services are down.
 
 This contract enables a **Swiggy/Zomato-style moving marker and live
 route experience**, but the map rendering and local marker movement are
-frontend responsibilities. The custom CP-SAT optimizer provides the
-route geometry and risk-aware choice; GPS updates keep the marker
-current; rerouting updates the route when needed; Socket.IO shares the
-location with authorized contacts.
+frontend responsibilities. The configured routing provider supplies
+route geometry and metrics; this MVP ranks provider candidates but has no
+verified risk data. GPS updates keep the marker current; rerouting updates
+the route when needed; Socket.IO sharing remains a future,
+authorization-gated capability.
 
 A full Google Maps-style voice-guided navigation system, reliable
 background tracking on locked phones, and live traffic-aware ETA require

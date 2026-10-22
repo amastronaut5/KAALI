@@ -72,6 +72,15 @@ deployment as separate Python modules. They can be split into separate
 services later if their CPU, memory, or deployment requirements differ
 significantly.
 
+**Current route implementation:** the FastAPI module lives at the
+repository root in `intelligence/kaali_routing.py` and uses a configured
+OSRM provider. It does not currently load a local graph or run CP-SAT.
+Only explicitly moderated reports can contribute corridor risk context;
+otherwise risk is unknown, not a numeric baseline. The current API does
+not implement the diagram's Socket.IO or deepfake-engine links. Provider
+requirements and current limits are documented in
+`kaali-navigation-setup.md`.
+
 ## 3. Component Responsibilities
 
 ### 3.1 Frontend --- React + TypeScript PWA
@@ -179,7 +188,8 @@ Represent the road network as a directed graph $G=(V,E)$:
 -   $d_e$: edge distance.
 -   $t_e$: estimated edge travel time.
 -   $r_e$: estimated risk in the range $[0,1]$. Route-level risk is
-    aggregated onto the public 0--100 `riskScore` scale.
+    aggregated onto the public 0--100 `riskScore` scale when trusted data
+    matches the route; otherwise the score is null and risk status is unknown.
 -   $x_e$: binary variable indicating whether a candidate edge is
     selected.
 
@@ -229,7 +239,7 @@ models. In summary:
     `{ latitude, longitude }` form.
 -   **Response:** `status`, `optimizerVersion`, `roadGraphVersion`,
     `riskModelVersion`, and `routes[]`, each with `routeId`,
-    `distanceMeters`, `durationSeconds`, `riskScore` (0--100) plus
+    `distanceMeters`, `durationSeconds`, `riskScore` (0--100 or null) plus
     `riskScale`, `riskLabel`, `riskExplanation`, `solverStatus`, validated
     `geometry`, and `warnings`.
 -   **Failure:** `{ "status": "error", "code": "NO_FEASIBLE_ROUTE", ... }`
@@ -666,7 +676,7 @@ Use these conventions across the public API, database, and Python service
 -   Public Express endpoints are prefixed with `/api/v1`.
 -   Route distance is `distanceMeters`; route duration is
     `durationSeconds`. Convert to minutes only in the client
-    presentation layer. `riskScore` is 0--100 with an explicit `riskScale`.
+    presentation layer. `riskScore` is 0--100 or null when unknown, with an explicit `riskScale`.
 -   GeoJSON coordinates are `[longitude, latitude]`; Express also checks
     coordinates against a pilot-area bounding box to catch swapped pairs.
 -   The public detection result fields are `resultLabel`, `score`,
